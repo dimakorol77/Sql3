@@ -1,0 +1,75 @@
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(128) NOT NULL,
+    last_name VARCHAR(128) NOT NULL,
+    email VARCHAR(128) NOT NULL,
+    salary INT,
+    department VARCHAR(128) NOT NULL
+);
+
+INSERT INTO employees (first_name, last_name, email, salary, department) VALUES
+("Steven","King","SKING", 24000, "Sales"),
+("Neena", "Kochhar", "NKOCHHAR", 17000, "Sales"),
+("Lex", "De Haan", "LDEHAAN", 17000, "Sales"),
+("Alexander", "Hunold", "AHUNOLD", 9000, "Finance"),
+("Bruce", "Ernst", "BERNST", 6000, "Finance"),
+("Valli", "Pataballa", "VPATABAL", 4800, "Finance"),
+("Diana", "Lorentz", "DIANALO", 8800, "Finance"),
+("Nancy", "Greenberg", "NGREENBE", 12008, "Shipping"),
+("Daniel", "Faviet", "DFAVIET", 9000, "Shipping"),
+("Jose Manuel", "Urman", "JMURMAN", 7800, "Shipping"),
+("Luis", "Popp", "LPOPP", 6900, "Shipping"),
+("Den", "Raphaely", "DRAPHEAL", 11000, "Marketing"),
+("Alexander", "Khoo", "AKHOO", 3100, "Marketing"),
+("Shelli", "Baida", "SBAIDA", 2900, "Marketing"),
+("Sigal", "Tobias", "STOBIAS", 2800, "Marketing"),
+("Matthew", "Weiss", "MWEISS", 8000, "Human Resources"),
+("Adam", "Fripp", "AFRIPP", 8200, "Human Resources"),
+("Payam", "Kaufling", "PKAUFLIN", 7900, "Human Resources"),
+("Shanta", "Vollman", "SVOLLMAN", 6500, "Human Resources"),
+("Kevin", "Mourgos", "KMOURGOS", 5800, "Human Resources"),
+("Julia", "Nayer", "JNAYER", 3200, "Human Resources"),
+("Adam", "Markle", "SMARKLE", 2200, "Human Resources"),
+("Laura", "Bissot", "LBISSOT", 3300, "Human Resources"),
+("Mozhe", "Atkinson", "MATKINSO", 2800, "Human Resources"),
+("Joshua", "Patel", "JPATEL", 2500, "Human Resources"),
+("Trenna", "Rajs", "TRAJS", 3500, "Human Resources"),
+("John", "Russell", "JRUSSEL", 14000, "IT"),
+("Karen", "Partners", "KPARTNER", 13500, "IT"),
+("Alberto", "Errazuriz", "AERRAZUR", 12000, "IT"),
+("Gerald", "Cambrault", "GCAMBRAU", 11000, "IT"),
+("Eleni", "Zlotkey", "EZLOTKEY", 10500, "IT"),
+("Adam", "Vargas", "PVARGAS", 2500, "Human Resources"),
+("Laura", "Errazuriz", "AERRAZUR", 12000, "IT");
+
+ALTER TABLE employees ADD COLUMN new_salary NUMERIC(7, 2);
+
+UPDATE employees
+SET new_salary = CASE
+    WHEN department = 'Sales' THEN salary * 1.20
+    WHEN department = 'Finance' THEN salary * 1.15
+    WHEN department = 'Shipping' THEN salary * 1.10
+    WHEN department = 'Marketing' THEN salary * 1.25
+    WHEN department = 'Human Resources' THEN salary * 1.20
+    WHEN department = 'IT' THEN salary * 1.35
+    ELSE salary
+END;
+
+SELECT first_name AS name, last_name AS surname, salary AS total_salary FROM employees;
+
+ALTER TABLE employees ADD COLUMN commission INT;
+
+UPDATE employees
+SET commission = CASE
+    WHEN salary < 3000 THEN NULL
+    WHEN salary < 6000 THEN 10
+    WHEN salary < 9000 THEN 15
+    ELSE 20
+END;
+
+ALTER TABLE employees ADD COLUMN final_salary NUMERIC(7, 2);
+
+UPDATE employees
+SET final_salary = salary + IFNULL(salary * commission / 100, 0);
+
+DELETE FROM employees WHERE commission < 1
